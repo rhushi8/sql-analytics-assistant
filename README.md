@@ -1,166 +1,79 @@
-# 🚀 SQL Analytics Assistant
+# 🚀 LLM-Powered SQL Analytics Assistant
 
-An AI-powered modular SQL analytics assistant that converts natural language questions into executable SQL queries, explains the query logic, generates business insights, and automatically visualizes results.
-
-Built using a hybrid deterministic + LLM architecture for stability, correctness, and production-style reliability.
+An intelligent, schema-adaptive Natural Language to SQL analytics engine built with Streamlit and a local LLM.
 
 ---
 
-## 🔥 Features
+## 🎯 Overview
 
-- 🧠 Natural Language → SQL conversion  
-- 🔗 Multi-table JOIN reasoning  
-- 📊 Automatic visualization (Histogram, Bar, Grouped Bar)  
-- 📖 SQL Explanation Mode  
-- 💼 Business Insight generation  
-- 🛡 SQL validation guardrails  
-- ⚙ Deterministic handling for simple queries  
-- 🏗 Modular architecture  
-- 🖥 Fully local LLM support (Ollama / CodeLlama compatible)
+This project converts natural language business questions into validated SQL queries, executes them on any uploaded SQLite database, and provides:
+
+- 📊 Interactive visualizations
+- 🧠 SQL explanations
+- 💼 Business insights
+- 💡 Context-aware follow-up suggestions
+
+The system dynamically extracts database schema at runtime and strictly grounds LLM outputs to prevent hallucinated tables or columns.
 
 ---
 
-## 🏗 Architecture Overview
+## 🔥 Key Features
+
+- ✅ Schema-adaptive SQL generation
+- ✅ Works with any uploaded `.db` file
+- ✅ Strict grounding to avoid hallucinated tables
+- ✅ SQL validation layer
+- ✅ Interactive Plotly visualizations
+- ✅ Business interpretation using LLM
+- ✅ Smart context-aware query suggestions
+- ✅ Query history tracking
+- ✅ CSV export
+
+---
+
+## 🧠 Architecture
 
 User Question  
 ↓  
-Intent Handling (Deterministic Layer)  
+Schema Extraction  
 ↓  
-LLM SQL Generation  
+Strict LLM SQL Generation  
 ↓  
 SQL Validation  
 ↓  
 Query Execution  
 ↓  
-Automatic Visualization  
-↓  
-SQL Explanation + Business Insight  
+Visualization + Insight + Suggestions  
 
-This system combines:
-- Rule-based deterministic logic (for simple queries)
-- LLM reasoning (for complex multi-table joins)
-- Validation safeguards to prevent hallucinated SQL
-- Safe visualization rendering to avoid runtime crashes
+---
+
+## 🗂 Example Database Used
+
+Tested with:
+- Sales database
+- Ecommerce relational database
+
+Tables include:
+- customers
+- products
+- orders
+- order_items
 
 ---
 
 ## 🛠 Tech Stack
 
-- Python  
-- Streamlit  
-- SQLite  
-- Pandas  
-- Matplotlib  
-- SQLParse  
-- Local LLM (via Ollama – CodeLlama)
+- Python
+- Streamlit
+- SQLite
+- Plotly
+- Local LLM (Ollama)
+- SQLParse
 
 ---
 
-## 📂 Project Structure
+## 🚀 Run Locally
 
-```
-sql-analytics-assistant/
-│
-├── app.py
-├── db.py
-├── llm.py
-├── validator.py
-├── database_setup.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## 🚀 How It Works
-
-### 1️⃣ Natural Language to SQL
-The assistant translates business questions into valid SQL queries using schema-aware prompting.
-
-### 2️⃣ SQL Guardrails
-- Ensures only SELECT statements are executed  
-- Prevents invalid or hallucinated columns  
-- Blocks destructive queries  
-
-### 3️⃣ Automatic Visualization
-Based on result structure:
-- 1 numeric column → Histogram  
-- 1 category + 1 metric → Bar chart  
-- 2 categories + 1 metric → Grouped bar chart  
-
-### 4️⃣ Explainable AI
-The system explains:
-- Why JOIN was used  
-- Why GROUP BY was needed  
-- How aggregation works  
-
-### 5️⃣ Business Interpretation
-Converts raw SQL results into executive-level business insights.
-
----
-
-## 📊 Example
-
-### Input:
-```
-For each region, show total revenue for Jan.
-```
-
-### Generated SQL:
-```sql
-SELECT region,
-       SUM(revenue) AS total_revenue
-FROM sales
-JOIN customers ON sales.customer_id = customers.customer_id
-WHERE month = 'Jan'
-GROUP BY region;
-```
-
-### Output:
-- Bar chart visualization
-- SQL explanation
-- Business insight summary
-
----
-
-## ⚡ Installation
-
-### 1️⃣ Clone Repository
-```
-git clone https://github.com/yourusername/sql-analytics-assistant.git
-cd sql-analytics-assistant
-```
-
-### 2️⃣ Create Virtual Environment
-```
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 3️⃣ Install Dependencies
-```
+```bash
 pip install -r requirements.txt
-```
-
-### 4️⃣ Run Database Setup
-```
-python database_setup.py
-```
-
-### 5️⃣ Run Application
-```
 streamlit run app.py
-```
-
----
-
-## 🎯 Future Improvements
-
-- Conversational memory support  
-- Advanced visualization intelligence  
-- Cloud deployment  
-- Real enterprise dataset integration  
-
----
-
-
