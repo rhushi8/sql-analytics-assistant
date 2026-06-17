@@ -2,8 +2,8 @@
 
 Ask a business question in plain English and get back a validated SQL query, an automatic chart, a plain-English explanation, and a short business insight — without writing any SQL.
 
-## Why this exists
-The people who need answers from a database often can't write SQL, and letting an LLM write SQL unchecked is risky: it hallucinates table/column names and can issue destructive queries. This assistant keeps the LLM useful for language understanding while a validation layer keeps every generated query safe and correct.
+## Problem Statement
+Most business users who need answers from a database can't write SQL, leaving them dependent on technical teams for routine questions. Bridging that gap with an LLM is risky on its own: left unconstrained, it hallucinates table and column names and can produce unsafe or destructive queries. The problem this project addresses: let non-technical users query data in plain English while guaranteeing that every executed query is valid, read-only, and safe.
 
 ## Key features
 - **Natural language → SQL** with schema-aware prompting (real table and column names supplied as context).
