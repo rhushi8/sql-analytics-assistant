@@ -1,6 +1,7 @@
 import sqlite3
-import pandas as pd
 import random
+
+random.seed(42)  # reproducible demo data
 
 conn = sqlite3.connect("database.db")
 cursor = conn.cursor()

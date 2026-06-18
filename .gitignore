@@ -1,8 +1,20 @@
 venv/
 .venv/
+env/
 __pycache__/
 *.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
 .env
+*.env
 *.log
 .DS_Store
 Thumbs.db
+
+# Runtime / uploaded databases (regenerable via database_setup.py)
+uploaded_database.db
+sales.db
+
+# Personal scratch notes (contained a leaked key — keep out of VCS)
+SQL assistant LLM project.txt

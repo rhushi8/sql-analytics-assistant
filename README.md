@@ -7,33 +7,43 @@ Most business users who need answers from a database can't write SQL, leaving th
 
 ## Key features
 - **Natural language → SQL** with schema-aware prompting (real table and column names supplied as context).
-- **Hybrid reliability** — a deterministic path handles simple queries; the LLM handles complex multi-table joins.
-- **Safety guardrails** — SELECT-only, destructive operations blocked, and hallucinated/unknown columns rejected *before* execution.
+- **Self-correcting generation** — if a generated query fails (e.g. a hallucinated column), the SQLite error is fed back to the LLM for a single corrective retry before giving up.
+- **Conversational memory** — recent question/SQL turns are passed as context so follow-up questions ("now break that down by month") resolve correctly.
+- **Safety guardrails** — SELECT-only (and CTEs), destructive keywords blocked on word boundaries, and stacked/multiple statements rejected *before* execution.
 - **Automatic visualization** — chart chosen by result shape: 1 numeric column → histogram, 1 category + metric → bar chart, 2 categories + metric → grouped bar.
-- **Explainability** — explains the generated SQL in plain English and turns the result into a business insight.
+- **Explainability** — explains the generated SQL in plain English and turns the result into a business insight, degrading gracefully if the LLM is unavailable.
 
 ## How it works
 ```
-plain-English question → intent routing → schema-aware SQL generation → validation (SELECT-only + column check) → execute on SQLite → auto-visualize + explain + insight
+plain-English question → schema-aware SQL generation → validation (SELECT-only) → execute on SQLite → (on error: one LLM repair attempt) → auto-visualize + explain + insight
 ```
+SQL generation, validation, and repair live in `sql_engine.py`, independent of the UI so they can be unit-tested without Streamlit or a live LLM.
 
 ## Tech stack
-Python · Streamlit · SQLite · Pandas · Matplotlib · SQLParse · Ollama / CodeLlama (local LLM)
+Python · Streamlit · SQLite · Pandas · Plotly · SQLParse · Ollama / CodeLlama (local LLM)
 
 ## Quickstart
 ```bash
 python -m venv venv
 venv\Scripts\activate               # Windows
 pip install -r requirements.txt
-python database_setup.py            # builds the sample SQLite database
+python database_setup.py            # builds the sample SQLite database (database.db)
 streamlit run app.py
 ```
 Requires a local Ollama model (e.g. CodeLlama) running for SQL generation.
 
+## Tests
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+Covers the SQL validator guardrails and the generation/validation/repair engine using a stub LLM and in-memory SQLite — no Ollama required.
+
 ## Project structure
 - `app.py` — Streamlit interface
-- `llm.py` — natural-language → SQL generation
-- `validator.py` — SQL safety & column validation
+- `sql_engine.py` — SQL generation, validation, and one-shot repair (UI-independent, tested)
+- `llm.py` — local LLM client (Ollama) with error handling
+- `validator.py` — SQL safety validation
 - `db.py` / `database_setup.py` — database access & sample data
 - `database.db` — sample SQLite database (runs out of the box)
 

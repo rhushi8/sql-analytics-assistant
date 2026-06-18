@@ -4,28 +4,27 @@
 
 import sqlite3
 
-def get_connection():
-    return sqlite3.connect("database.db")
+
+def get_connection(db_path="database.db"):
+    return sqlite3.connect(db_path)
 
 
 def get_schema(conn):
     cursor = conn.cursor()
 
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
-
-    schema_description = ""
+    schema_info = ""
+    tables = cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table';"
+    ).fetchall()
 
     for table in tables:
         table_name = table[0]
-        schema_description += f"\nTable: {table_name}\nColumns:\n"
+        columns = cursor.execute(
+            f"PRAGMA table_info({table_name});"
+        ).fetchall()
 
-        cursor.execute(f"PRAGMA table_info({table_name});")
-        columns = cursor.fetchall()
-
+        schema_info += f"\nTable: {table_name}\n"
         for col in columns:
-            col_name = col[1]
-            col_type = col[2]
-            schema_description += f"- {col_name} ({col_type})\n"
+            schema_info += f"- {col[1]} ({col[2]})\n"
 
-    return schema_description
+    return schema_info
